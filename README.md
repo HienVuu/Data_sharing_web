@@ -1,29 +1,29 @@
-# Docify - Hệ thống chia sẻ tài liệu
+# Docify - Document Sharing Platform
 
-Docify là một nền tảng chia sẻ tài liệu toàn diện, bao gồm ứng dụng web và ứng dụng di động, cho phép người dùng tải lên, xem và bình luận về các tài liệu như PDF và DOC.
+Docify is a comprehensive document sharing platform, including web and mobile applications, allowing users to upload, view, and comment on documents such as PDF and DOC files.
 
-## Tính năng chính
+## Key Features
 
-### Ứng dụng Web (Client)
-- **Trang chủ**: Hiển thị danh sách tài liệu với tìm kiếm và lọc.
-- **Đăng nhập/Đăng ký**: Xác thực người dùng.
-- **Tải tài liệu**: Upload file lên đến 5MB (PDF, DOC).
-- **Chi tiết tài liệu**: Xem tài liệu, bình luận và đánh giá.
-- **Quản trị**: Dashboard cho admin để quản lý tài liệu và bình luận.
-- **Liên hệ**: Trang liên hệ.
+### Web Application (Client)
+- **Home Page**: Displays list of documents with search and filtering.
+- **Login/Register**: User authentication.
+- **Upload Documents**: Upload files up to 5MB (PDF, DOC).
+- **Document Details**: View documents, comments, and ratings.
+- **Admin Panel**: Dashboard for admins to manage documents and comments.
+- **Contact**: Contact page.
 
-### Ứng dụng Di động (Mobile)
-- **Đăng nhập**: Xác thực người dùng.
-- **Trang chủ**: Danh sách tài liệu.
-- **Chi tiết**: Xem và bình luận tài liệu.
+### Mobile Application (Mobile)
+- **Login**: User authentication.
+- **Home**: List of documents.
+- **Details**: View and comment on documents.
 
-### Máy chủ (Server)
-- API RESTful cho tất cả chức năng.
-- Quản lý người dùng, tài liệu, bình luận.
-- Upload file với Multer.
-- Cơ sở dữ liệu MongoDB.
+### Server (Backend)
+- RESTful API for all functionalities.
+- User, document, and comment management.
+- File upload with Multer.
+- MongoDB database.
 
-## Công nghệ sử dụng
+## Technology Stack
 
 - **Backend**: Node.js, Express.js, MongoDB, Multer
 - **Frontend Web**: React, Vite, React Router
@@ -31,20 +31,20 @@ Docify là một nền tảng chia sẻ tài liệu toàn diện, bao gồm ứn
 - **Authentication**: Local storage (web), AsyncStorage (mobile)
 - **Database**: MongoDB
 
-## Cài đặt và chạy
+## Installation and Running
 
-### Yêu cầu hệ thống
-- Node.js (phiên bản 16+)
-- MongoDB (chạy cục bộ trên port 27017)
-- npm hoặc yarn
+### System Requirements
+- Node.js (version 16+)
+- MongoDB (running locally on port 27017)
+- npm or yarn
 
-### 1. Clone repository
+### 1. Clone Repository
 ```bash
 git clone https://github.com/HienVuu/Data_sharing_web.git
 cd data_sharing
 ```
 
-### 2. Cài đặt dependencies cho từng phần
+### 2. Install Dependencies for Each Part
 
 #### Server
 ```bash
@@ -64,82 +64,66 @@ cd ../mobile
 npm install
 ```
 
-### 3. Chạy MongoDB
-Đảm bảo MongoDB đang chạy trên `mongodb://127.0.0.1:27017/docshare_db`
+### 3. Run MongoDB
+Ensure MongoDB is running on `mongodb://127.0.0.1:27017/docshare_db`
 
-### 4. Chạy các ứng dụng
+### 4. Run Applications
 
 #### Server
 ```bash
 cd server
-npm run dev  # hoặc npm start
+npm run dev  # or npm start
 ```
-Server sẽ chạy trên http://localhost:3000
+Server will run on http://localhost:3000
 
 #### Client (Web)
 ```bash
 cd client
 npm run dev
 ```
-Web app sẽ chạy trên http://localhost:5173
+Web app will run on http://localhost:5173
 
 #### Mobile
 ```bash
 cd mobile
 npm start
 ```
-Sau đó chọn platform (iOS, Android, Web) để chạy.
+Then select platform (iOS, Android, Web) to run.
 
-### 5. Truy cập
+### 5. Access
 - Web: http://localhost:5173
 - API: http://localhost:3000
-- Mobile: Theo hướng dẫn của Expo
+- Mobile: Follow Expo instructions
 
-## Cấu trúc dự án
+## Project Structure
 
 ```
 data_sharing/
-├── client/          # Ứng dụng web React
-├── mobile/          # Ứng dụng di động React Native
-├── server/          # Máy chủ backend Node.js
-├── .gitignore       # File ignore Git
-└── README.md        # Tài liệu này
+├── client/          # React web application
+├── mobile/          # React Native mobile application
+├── server/          # Node.js backend server
+├── .gitignore       # Git ignore file
+└── README.md        # This documentation
 ```
 
 ## API Endpoints
 
 ### Authentication
-- `POST /api/login` - Đăng nhập
-- `POST /api/register` - Đăng ký
+- `POST /api/login` - Login
+- `POST /api/register` - Register
 
 ### Documents
-- `POST /api/documents` - Upload tài liệu
-- `GET /api/documents` - Lấy danh sách
-- `GET /api/documents/:id` - Chi tiết tài liệu
+- `POST /api/documents` - Upload document
+- `GET /api/documents` - Get list
+- `GET /api/documents/:id` - Document details
 
 ### Comments
-- `POST /api/comments` - Thêm bình luận
-- `GET /api/comments/:documentId` - Lấy bình luận
+- `POST /api/comments` - Add comment
+- `GET /api/comments/:documentId` - Get comments
 
 ### Admin
-- `GET /api/admin/stats` - Thống kê
-- `GET /api/admin/comments` - Tất cả bình luận
-- `DELETE /api/admin/comments/:id` - Xóa bình luận
-- `DELETE /api/admin/documents/:id` - Xóa tài liệu
-- `PUT /api/admin/documents/:id` - Cập nhật tài liệu
-
-## Đóng góp
-
-1. Fork dự án
-2. Tạo branch mới (`git checkout -b feature/AmazingFeature`)
-3. Commit thay đổi (`git commit -m 'Add some AmazingFeature'`)
-4. Push lên branch (`git push origin feature/AmazingFeature`)
-5. Tạo Pull Request
-
-## Giấy phép
-
-Dự án này sử dụng giấy phép ISC.
-
-## Liên hệ
-
-Nếu có câu hỏi, vui lòng tạo issue trên GitHub hoặc liên hệ qua trang liên hệ trong ứng dụng.
+- `GET /api/admin/stats` - Statistics
+- `GET /api/admin/comments` - All comments
+- `DELETE /api/admin/comments/:id` - Delete comment
+- `DELETE /api/admin/documents/:id` - Delete document
+- `PUT /api/admin/documents/:id` - Update document
