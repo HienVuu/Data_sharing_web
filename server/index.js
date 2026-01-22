@@ -15,7 +15,7 @@ app.use(cors());
 // Public thư mục uploads để trình duyệt truy cập được file
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// --- CẤU HÌNH MULTER (UPLOAD FILE) ---
+// --- CẤU HÌNH UPLOAD FILE ---
 // 1. Nơi lưu trữ và tên file
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -28,7 +28,7 @@ const storage = multer.diskStorage({
     filename: function (req, file, cb) {
         // Tạo tên file duy nhất để tránh trùng lặp
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        // Chuyển tên file gốc sang không dấu hoặc giữ nguyên tùy ý (ở đây giữ nguyên nhưng thêm suffix)
+        // Chuyển tên file gốc sang không dấu hoặc giữ nguyên tùy ý 
         cb(null, uniqueSuffix + '-' + file.originalname);
     }
 });
@@ -91,11 +91,11 @@ app.post('/api/login', async (req, res) => {
         if (user) {
             res.json({
                 success: true,
-                message: 'Dang nhap thanh cong',
+                message: 'Đăng nhập thành công',
                 user: { id: user._id, username: user.username, role: user.role }
             });
         } else {
-            res.status(401).json({ success: false, message: 'Sai thong tin dang nhap' });
+            res.status(401).json({ success: false, message: 'Sai thông tin đăng nhập' });
         }
     } catch (error) {
         res.status(500).json({ success: false, error: error.message });
@@ -129,7 +129,7 @@ app.post('/api/register', async (req, res) => {
 app.post('/api/documents', upload.single('file'), async (req, res) => {
     try {
         if (!req.file) {
-            return res.status(400).json({ success: false, message: 'Vui long chon file (toi da 5MB)' });
+            return res.status(400).json({ success: false, message: 'Vui lòng chọn file (toi da 5MB)' });
         }
 
         const { title, description, category } = req.body;
@@ -175,7 +175,7 @@ app.get('/api/documents/:id', async (req, res) => {
             { $inc: { views: 1 } },
             { new: true }
         );
-        if (!document) return res.status(404).json({ message: 'Khong tim thay' });
+        if (!document) return res.status(404).json({ message: 'Không tìm thấy' });
         res.json(document);
     } catch (error) {
         res.status(500).json({ error: error.message });
