@@ -1,187 +1,141 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
 function DetailPage() {
     const { id } = useParams();
+    const navigate = useNavigate();
     const [document, setDocument] = useState(null);
     const [comments, setComments] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-
-    // State cho form bình luận
-    const [commentForm, setCommentForm] = useState({
-        authorName: '',
-        email: '',
-        content: '',
-        rating: 5
-    });
-
-    // Hàm lấy chi tiết tài liệu và danh sách bình luận
-    const fetchData = async () => {
-        try {
-            // Gọi song song 2 API để tối ưu tốc độ
-            const [docRes, commentRes] = await Promise.all([
-                fetch(`http://localhost:3000/api/documents/${id}`),
-                fetch(`http://localhost:3000/api/comments/${id}`)
-            ]);
-
-            if (!docRes.ok) throw new Error('Không thể tải thông tin tài liệu');
-            
-            const docData = await docRes.json();
-            const commentData = await commentRes.json();
-
-            setDocument(docData);
-            setComments(commentData);
-            setLoading(false);
-        } catch (err) {
-            setError(err.message);
-            setLoading(false);
-        }
-    };
+    const [newComment, setNewComment] = useState('');
+    const [rating, setRating] = useState(5); // Mặc định 5 sao
 
     useEffect(() => {
-        fetchData();
+        fetch(`http://localhost:3000/api/documents/${id}`)
+            .then(res => res.json())
+            .then(data => setDocument(data))
+            .catch(err => console.error(err));
+
+        fetchComments();
     }, [id]);
 
-    // Xử lý thay đổi input form bình luận
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setCommentForm({ ...commentForm, [name]: value });
+    const fetchComments = () => {
+        fetch(`http://localhost:3000/api/comments/${id}`)
+            .then(res => res.json())
+            .then(data => setComments(data))
+            .catch(err => console.error(err));
     };
 
-    // Xử lý gửi bình luận
     const handleCommentSubmit = async (e) => {
         e.preventDefault();
-        try {
-            const response = await fetch('http://localhost:3000/api/comments', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    documentId: id,
-                    ...commentForm
-                })
-            });
+        const userStr = localStorage.getItem('user');
+        if (!userStr) {
+            alert('Vui lòng đăng nhập để bình luận!');
+            navigate('/login');
+            return;
+        }
+        const user = JSON.parse(userStr);
 
-            if (response.ok) {
-                alert('Gửi bình luận thành công!');
-                // Reset form
-                setCommentForm({ authorName: '', email: '', content: '', rating: 5 });
-                // Tải lại dữ liệu để thấy bình luận mới
-                fetchData();
-            } else {
-                alert('Lỗi khi gửi bình luận');
-            }
-        } catch (err) {
-            console.error(err);
-            alert('Lỗi kết nối server');
+        const response = await fetch('http://localhost:3000/api/comments', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                documentId: id,
+                authorName: user.username,
+                email: user.email || 'user@example.com',
+                content: newComment,
+                rating: rating 
+            })
+        });
+
+        if (response.ok) {
+            setNewComment('');
+            setRating(5);
+            fetchComments();
+        } else {
+            alert('Gửi bình luận thất bại');
         }
     };
 
-    if (loading) return <div style={{textAlign: 'center', marginTop: '50px'}}>Đang tải dữ liệu...</div>;
-    if (error) return <div style={{textAlign: 'center', color: 'red', marginTop: '50px'}}>{error}</div>;
-    if (!document) return <div style={{textAlign: 'center', marginTop: '50px'}}>Tài liệu không tồn tại</div>;
+    // Hàm hiển thị sao (dùng cho danh sách bình luận)
+    const renderStars = (score) => {
+        return [...Array(5)].map((_, i) => (
+            <span key={i} style={{ color: i < score ? '#F59E0B' : '#D1D5DB', fontSize: '18px' }}>★</span>
+        ));
+    };
+
+    if (!document) return <div className="page-centered">Đang tải...</div>;
 
     return (
-        <div className="detail-container">
-            {/* Phần thông tin tài liệu */}
-            <div className="doc-detail-card">
-                <h1 className="detail-title">{document.title}</h1>
-                <div className="detail-meta">
-                    <span>Danh mục: <strong>{document.category}</strong></span>
-                    <span> • </span>
-                    <span>Lượt xem: <strong>{document.views}</strong></span>
-                    <span> • </span>
-                    <span>Ngày đăng: {new Date(document.createdAt).toLocaleDateString('vi-VN')}</span>
+        <div className="main-layout" style={{ display: 'block', paddingTop: '30px' }}>
+            <div style={{ background: 'white', padding: '30px', borderRadius: '12px', border: '1px solid #E5E7EB' }}>
+                <h1 style={{ color: '#2563EB', marginTop: 0 }}>{document.title}</h1>
+                <div style={{ color: '#6B7280', marginBottom: '20px', fontSize: '14px' }}>
+                    Danh mục: <strong>{document.category}</strong> • 
+                    Lượt xem: <strong>{document.views}</strong> • 
+                    Ngày đăng: {new Date(document.createdAt).toLocaleDateString('vi-VN')}
                 </div>
                 
-                <div className="detail-desc">
-                    <h3>Mô tả tài liệu:</h3>
-                    <p>{document.description}</p>
+                <div style={{ padding: '20px', background: '#F9FAFB', borderRadius: '8px', marginBottom: '30px', lineHeight: '1.6' }}>
+                    <strong>Mô tả tài liệu:</strong> <br/>
+                    {document.description || 'Chưa có mô tả chi tiết cho tài liệu này.'}
                 </div>
 
-                <div className="detail-actions">
-                    <a href={document.fileUrl} target="_blank" rel="noreferrer" className="btn-download">
-                        Tải xuống / Xem tài liệu
+                <div style={{ textAlign: 'center', marginBottom: '40px' }}>
+                    <a href={document.fileUrl} target="_blank" rel="noreferrer" className="btn-primary" style={{ display: 'inline-block', width: 'auto', padding: '12px 30px', fontSize: '16px' }}>
+                        ĐỌC & TẢI XUỐNG TÀI LIỆU
                     </a>
                 </div>
-            </div>
 
-            <hr className="divider" />
+                <h3 style={{ borderBottom: '2px solid #E5E7EB', paddingBottom: '10px' }}>Bình luận & Đánh giá</h3>
 
-            {/* Phần Bình luận & Đánh giá */}
-            <div className="comments-section">
-                <h3>Bình luận & Đánh giá ({comments.length})</h3>
-
-                {/* Form gửi bình luận */}
-                <div className="comment-form-box">
-                    <h4>Gửi đánh giá của bạn</h4>
-                    <form onSubmit={handleCommentSubmit}>
-                        <div className="form-row">
-                            <input 
-                                type="text" 
-                                name="authorName" 
-                                placeholder="Họ tên của bạn" 
-                                value={commentForm.authorName} 
-                                onChange={handleInputChange} 
-                                required 
-                                className="form-input"
-                            />
-                            <input 
-                                type="email" 
-                                name="email" 
-                                placeholder="Email" 
-                                value={commentForm.email} 
-                                onChange={handleInputChange} 
-                                required 
-                                className="form-input"
-                            />
+                {/* Form nhập bình luận */}
+                <form onSubmit={handleCommentSubmit} style={{ marginBottom: '40px' }}>
+                    <div style={{ marginBottom: '15px' }}>
+                        <label style={{ display: 'block', fontWeight: 'bold', marginBottom: '5px' }}>Đánh giá của bạn:</label>
+                        <div style={{ display: 'flex', gap: '5px', cursor: 'pointer' }}>
+                            {[1, 2, 3, 4, 5].map((star) => (
+                                <span 
+                                    key={star} 
+                                    onClick={() => setRating(star)}
+                                    style={{ 
+                                        color: star <= rating ? '#F59E0B' : '#D1D5DB', 
+                                        fontSize: '30px', 
+                                        transition: 'color 0.2s' 
+                                    }}
+                                >
+                                    ★
+                                </span>
+                            ))}
                         </div>
-                        <div className="form-row">
-                            <label>Đánh giá: </label>
-                            <select 
-                                name="rating" 
-                                value={commentForm.rating} 
-                                onChange={handleInputChange}
-                                className="form-select"
-                            >
-                                <option value="5">5 Sao (Tuyệt vời)</option>
-                                <option value="4">4 Sao (Tốt)</option>
-                                <option value="3">3 Sao (Bình thường)</option>
-                                <option value="2">2 Sao (Tệ)</option>
-                                <option value="1">1 Sao (Rất tệ)</option>
-                            </select>
-                        </div>
+                    </div>
+
+                    <div style={{ marginBottom: '15px' }}>
                         <textarea 
-                            name="content" 
-                            placeholder="Nội dung bình luận..." 
-                            value={commentForm.content} 
-                            onChange={handleInputChange} 
-                            required 
-                            className="form-textarea"
+                            className="form-textarea" 
+                            placeholder="Chia sẻ cảm nghĩ về tài liệu này..."
+                            value={newComment}
+                            onChange={(e) => setNewComment(e.target.value)}
+                            required
                         ></textarea>
-                        <button type="submit" className="btn-submit">Gửi bình luận</button>
-                    </form>
-                </div>
+                    </div>
+                    <button type="submit" className="btn-primary" style={{ width: 'auto' }}>Gửi đánh giá</button>
+                </form>
 
                 {/* Danh sách bình luận */}
-                <div className="comments-list">
-                    {comments.map((cmt) => (
-                        <div key={cmt._id} className="comment-item">
-                            <div className="comment-header">
-                                <strong>{cmt.authorName}</strong>
-                                <span className="comment-rating"> - {cmt.rating} ⭐</span>
-                                <span className="comment-date">
-                                    {new Date(cmt.createdAt).toLocaleString('vi-VN')}
-                                </span>
+                <div className="comment-list">
+                    {comments.map((cmt, index) => (
+                        <div key={index} style={{ borderBottom: '1px solid #eee', padding: '15px 0' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}>
+                                <strong style={{ color: '#2563EB' }}>{cmt.authorName}</strong>
+                                <span>{renderStars(cmt.rating || 5)}</span>
                             </div>
-                            <div className="comment-content">
-                                {cmt.content}
-                            </div>
+                            <p style={{ margin: '5px 0', color: '#374151' }}>{cmt.content}</p>
+                            <span style={{ fontSize: '12px', color: '#9CA3AF' }}>
+                                {new Date(cmt.createdAt).toLocaleDateString('vi-VN')}
+                            </span>
                         </div>
                     ))}
-                    {comments.length === 0 && <p>Chưa có bình luận nào. Hãy là người đầu tiên!</p>}
+                    {comments.length === 0 && <p style={{ color: '#666', fontStyle: 'italic' }}>Chưa có đánh giá nào.</p>}
                 </div>
             </div>
         </div>

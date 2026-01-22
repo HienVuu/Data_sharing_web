@@ -1,5 +1,3 @@
-# Requirements
-
 ## System Requirements
 - Operating System: Windows 10/11, macOS, or Linux
 - Node.js: Version 16 or higher
