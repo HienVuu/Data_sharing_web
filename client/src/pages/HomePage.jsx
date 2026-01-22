@@ -9,7 +9,7 @@ function HomePage() {
     // --- STATE BỘ LỌC ---
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedCategory, setSelectedCategory] = useState('All');
-    const [selectedType, setSelectedType] = useState('All'); // <-- MỚI: State lưu loại file
+    const [selectedType, setSelectedType] = useState('All'); 
 
     useEffect(() => {
         fetch('http://localhost:3000/api/documents')

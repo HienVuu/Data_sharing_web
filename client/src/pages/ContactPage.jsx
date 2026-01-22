@@ -5,7 +5,7 @@ function ContactPage() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        setStatus('Cảm ơn bạn! Ý kiến của bạn đã được gửi tới quản trị viên.');
+        setStatus('Ý kiến của bạn đã được gửi tới quản trị viên.');
         e.target.reset();
     };
 
