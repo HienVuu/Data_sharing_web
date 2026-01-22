@@ -52,7 +52,7 @@ export default function DetailScreen({ route }) {
         }
     };
 
-    // Hàm render sao tĩnh (chỉ hiển thị)
+    // Hàm render sao tĩnh
     const renderStaticStars = (score) => {
         return (
             <View style={{ flexDirection: 'row' }}>

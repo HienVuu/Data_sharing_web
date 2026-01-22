@@ -41,7 +41,7 @@ export default function HomeScreen({ navigation }) {
                 <Text style={styles.title} numberOfLines={2}>{item.title}</Text>
                 <View style={styles.metaRow}>
                     <Text style={styles.metaText}>{item.views} lượt xem</Text>
-                    <Text style={styles.metaText}> • </Text>
+                    <Text style={styles.metaText}> • </Text> 
                     <Text style={styles.metaText}>
                         {new Date(item.createdAt).toLocaleDateString('vi-VN')}
                     </Text>

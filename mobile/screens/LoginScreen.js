@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, Image } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import api from '../api'; // Import file cấu hình API ta đã tạo
+import api from '../api'; 
 
 export default function LoginScreen({ navigation }) {
     const [username, setUsername] = useState('');

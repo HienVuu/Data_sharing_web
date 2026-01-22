@@ -38,7 +38,7 @@ const upload = multer({
     storage: storage,
     limits: { fileSize: 5 * 1024 * 1024 }, // Giới hạn 5MB 
     fileFilter: function (req, file, cb) {
-        // Có thể thêm check đuôi file .pdf, .doc tại đây nếu muốn
+        
         cb(null, true);
     }
 });
@@ -126,7 +126,6 @@ app.post('/api/register', async (req, res) => {
 });
 
 // 3. API Upload Tài liệu mới 
-// QUAN TRỌNG: field name phải là 'file' để khớp với Frontend
 app.post('/api/documents', upload.single('file'), async (req, res) => {
     try {
         if (!req.file) {
@@ -203,7 +202,7 @@ app.get('/api/comments/:documentId', async (req, res) => {
     }
 });
 
-// --- KHU VỰC API ADMIN (MỚI BỔ SUNG) ---
+// --- KHU VỰC API ADMIN ---
 
 // 7. Thống kê Dashboard
 app.get('/api/admin/stats', async (req, res) => {
@@ -219,7 +218,7 @@ app.get('/api/admin/stats', async (req, res) => {
     }
 });
 
-// 8. Lấy toàn bộ bình luận (cho Admin quản lý)
+// 8. Lấy toàn bộ bình luận 
 app.get('/api/admin/comments', async (req, res) => {
     try {
         const comments = await Comment.find().sort({ createdAt: -1 });
@@ -239,11 +238,11 @@ app.delete('/api/admin/comments/:id', async (req, res) => {
     }
 });
 
-// 10. Xóa tài liệu (Xóa cả bình luận liên quan)
+// 10. Xóa tài liệu 
 app.delete('/api/admin/documents/:id', async (req, res) => {
     try {
         await Document.findByIdAndDelete(req.params.id);
-        // Xóa luôn các bình luận của tài liệu này để sạch data
+        // Xóa các bình luận của tài liệu
         await Comment.deleteMany({ documentId: req.params.id });
         res.json({ success: true, message: 'Đã xóa tài liệu' });
     } catch (error) {

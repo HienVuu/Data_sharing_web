@@ -12,8 +12,7 @@ export default function ContactScreen() {
             return;
         }
 
-        // Mô phỏng gửi liên hệ (Vì API liên hệ trong bài này thường chỉ cần alert)
-        // Nếu muốn lưu thật, bạn có thể gọi API POST /contacts tương tự như Comment
+        // Mô phỏng gửi liên hệ 
         setTimeout(() => {
             Alert.alert("Thành công", "Cảm ơn bạn đã đóng góp ý kiến!");
             setName('');
@@ -27,7 +26,7 @@ export default function ContactScreen() {
             <View style={styles.header}>
                 <Text style={styles.title}>GỬI Ý KIẾN PHẢN HỒI</Text>
                 <Text style={styles.subtitle}>
-                    Chúng tôi luôn lắng nghe ý kiến của bạn để cải thiện ứng dụng DOCIFY tốt hơn.
+                    Chúng tôi luôn lắng nghe ý kiến của bạn để cải thiện ứng dụng tốt hơn.
                 </Text>
             </View>
 
@@ -65,8 +64,8 @@ export default function ContactScreen() {
             </View>
             
             <View style={styles.footer}>
-                <Text style={styles.footerText}>Hotline: 024.1234.5678</Text>
-                <Text style={styles.footerText}>Email: support@docify.bk.edu.vn</Text>
+                <Text style={styles.footerText}>Hotline: 036.3636.363</Text>
+                <Text style={styles.footerText}>Email: support@docify.vn</Text>
             </View>
         </ScrollView>
     );
