@@ -31,12 +31,11 @@ Docify is a comprehensive document sharing platform, including web and mobile ap
 - **Authentication**: Local storage (web), AsyncStorage (mobile)
 - **Database**: MongoDB
 
-## Installation and Running
+## Prerequisites
 
-### System Requirements
-- Node.js (version 16+)
-- MongoDB (running locally on port 27017)
-- npm or yarn
+See [requirements.md](requirements.md) for detailed system requirements and software dependencies.
+
+## Installation and Running
 
 ### 1. Clone Repository
 ```bash
@@ -103,7 +102,8 @@ data_sharing/
 ├── mobile/          # React Native mobile application
 ├── server/          # Node.js backend server
 ├── .gitignore       # Git ignore file
-└── README.md        # This documentation
+├── README.md        # This documentation
+└── requirements.md  # System requirements and dependencies
 ```
 
 ## API Endpoints
