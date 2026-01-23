@@ -81,6 +81,15 @@ const CommentSchema = new mongoose.Schema({
 });
 const Comment = mongoose.model('Comment', CommentSchema);
 
+// Model liên hệ
+const ContactSchema = new mongoose.Schema({
+    name: String,
+    email: String,
+    content: String,
+    createdAt: { type: Date, default: Date.now }
+});
+const Contact = mongoose.model('Contact', ContactSchema);
+
 // --- CÁC API CHỨC NĂNG ---
 
 // 1. API Đăng nhập
@@ -202,6 +211,17 @@ app.get('/api/comments/:documentId', async (req, res) => {
     }
 });
 
+// 7. API Gửi liên hệ (Dùng cho cả Web và Mobile)
+app.post('/api/contacts', async (req, res) => {
+    try {
+        const { name, email, content } = req.body;
+        const newContact = await Contact.create({ name, email, content });
+        res.json({ success: true, message: 'Đã gửi liên hệ', data: newContact });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
 // --- KHU VỰC API ADMIN ---
 
 // 7. Thống kê Dashboard
@@ -260,6 +280,26 @@ app.put('/api/admin/documents/:id', async (req, res) => {
             { new: true } // Trả về dữ liệu mới sau khi update
         );
         res.json({ success: true, data: updatedDoc });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// 12. Lấy danh sách liên hệ (Admin)
+app.get('/api/admin/contacts', async (req, res) => {
+    try {
+        const contacts = await Contact.find().sort({ createdAt: -1 });
+        res.json(contacts);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// 13. Xóa liên hệ (Admin)
+app.delete('/api/admin/contacts/:id', async (req, res) => {
+    try {
+        await Contact.findByIdAndDelete(req.params.id);
+        res.json({ success: true, message: 'Đã xóa liên hệ' });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }

@@ -1,24 +1,31 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Alert, StyleSheet, ScrollView } from 'react-native';
+import api from '../api';
 
 export default function ContactScreen() {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [message, setMessage] = useState('');
 
-    const handleSend = () => {
+    const handleSend = async () => {
         if (!name || !email || !message) {
             Alert.alert("Thông báo", "Vui lòng điền đầy đủ thông tin.");
             return;
         }
 
-        // Mô phỏng gửi liên hệ 
-        setTimeout(() => {
+        try {
+            await api.post('/contacts', {
+                name: name,
+                email: email,
+                content: message
+            });
             Alert.alert("Thành công", "Cảm ơn bạn đã đóng góp ý kiến!");
             setName('');
             setEmail('');
             setMessage('');
-        }, 500);
+        } catch (error) {
+            Alert.alert("Lỗi", "Không gửi được liên hệ, vui lòng thử lại.");
+        }
     };
 
     return (

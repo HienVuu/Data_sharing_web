@@ -4,22 +4,18 @@ function AdPopup() {
     const [showPopup, setShowPopup] = useState(false);
 
     useEffect(() => {
-        // Kiểm tra trạng thái đóng popup trong localStorage
         const isClosed = localStorage.getItem('docify_popup_closed');
 
         if (!isClosed) {
-            // Yêu cầu: Hiện popup sau 1 phút (60000ms)
-            // Lưu ý: Có thể chỉnh xuống 3000ms khi demo
             const timer = setTimeout(() => {
                 setShowPopup(true);
-            }, 60000); 
+            }, 3000); 
 
             return () => clearTimeout(timer);
         }
     }, []);
 
     const handleClose = () => {
-        // Lưu trạng thái đã đóng để không hiển thị lại trong phiên sau
         localStorage.setItem('docify_popup_closed', 'true');
         setShowPopup(false);
     };

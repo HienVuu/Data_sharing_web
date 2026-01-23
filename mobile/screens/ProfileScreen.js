@@ -45,6 +45,13 @@ export default function ProfileScreen({ navigation }) {
                 <TouchableOpacity style={styles.menuItem}>
                     <Text style={styles.menuText}>⭐ Đánh giá của tôi (Đang phát triển)</Text>
                 </TouchableOpacity>
+
+                <TouchableOpacity 
+                    style={styles.menuItem}
+                    onPress={() => navigation.navigate('Contact')}
+                >
+                    <Text style={styles.menuText}>📞 Gửi ý kiến & Liên hệ</Text>
+                </TouchableOpacity>
                 
                 <TouchableOpacity style={[styles.menuItem, styles.logoutBtn]} onPress={handleLogout}>
                     <Text style={styles.logoutText}>Đăng xuất</Text>

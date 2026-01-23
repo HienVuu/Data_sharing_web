@@ -122,12 +122,60 @@ a { text-decoration: none; color: inherit; }
 .card-title { font-size: 16px; font-weight: 700; margin: 0 0 8px 0; line-height: 1.4; color: #1F2937; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .card-meta { margin-top: auto; display: flex; justify-content: space-between; font-size: 12px; color: #9CA3AF; padding-top: 10px; }
 
-/* Responsive */
+/* --- RESPONSIVE 3 NGƯỠNG (Theo yêu cầu BTL) --- */
+
+/* NGƯỠNG 1: MOBILE (< 800px) */
 @media (max-width: 800px) {
-  .main-layout { flex-direction: column; }
-  .sidebar { width: 100%; display: flex; overflow-x: auto; padding-bottom: 10px; gap: 10px; }
+  .main-layout {
+    flex-direction: column;
+    padding: 0 15px 50px 15px;
+  }
+  .sidebar {
+    width: 100%;
+    display: flex;
+    overflow-x: auto;
+    padding-bottom: 10px;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
   .sidebar-title { display: none; }
+  .document-grid {
+    grid-template-columns: 1fr;
+  }
   .navbar { padding: 0 15px; }
   .nav-menu { gap: 15px; font-size: 13px; }
   .form-container { width: 95%; padding: 20px; }
+  .search-container { padding: 0 15px; }
+}
+
+/* NGƯỠNG 2: TABLET (800px đến 1200px) */
+@media (min-width: 800px) and (max-width: 1200px) {
+  .main-layout {
+    max-width: 95%;
+    padding: 0 10px 50px 10px;
+    gap: 30px;
+  }
+  .document-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .sidebar {
+    width: 200px;
+  }
+  .navbar { padding: 0 20px; }
+  .search-container { padding: 0 20px; }
+}
+
+/* NGƯỠNG 3: DESKTOP (> 1200px) */
+@media (min-width: 1201px) {
+  .main-layout {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px 50px 20px;
+  }
+  .document-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .sidebar {
+    width: 250px;
+  }
 }

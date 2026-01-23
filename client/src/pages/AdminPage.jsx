@@ -7,6 +7,7 @@ function AdminPage() {
     const [stats, setStats] = useState({ totalViews: 0, totalDocs: 0, totalComments: 0 });
     const [comments, setComments] = useState([]);
     const [documents, setDocuments] = useState([]);
+    const [contacts, setContacts] = useState([]);
     
     // UI State
     const [activeTab, setActiveTab] = useState('docs'); // 'docs' hoặc 'comments'
@@ -24,15 +25,17 @@ function AdminPage() {
 
     const fetchData = async () => {
         try {
-            const [statsRes, cmtRes, docRes] = await Promise.all([
+            const [statsRes, cmtRes, docRes, contactRes] = await Promise.all([
                 fetch('http://localhost:3000/api/admin/stats'),
                 fetch('http://localhost:3000/api/admin/comments'),
-                fetch('http://localhost:3000/api/documents') // Tận dụng API lấy list docs có sẵn
+                fetch('http://localhost:3000/api/documents'), // Tận dụng API lấy list docs có sẵn
+                fetch('http://localhost:3000/api/admin/contacts')
             ]);
             
             setStats(await statsRes.json());
             setComments(await cmtRes.json());
             setDocuments(await docRes.json());
+            setContacts(await contactRes.json());
         } catch (error) {
             console.error(error);
         }
@@ -42,6 +45,13 @@ function AdminPage() {
     const handleDeleteComment = async (id) => {
         if (!window.confirm('Xóa bình luận này?')) return;
         await fetch(`http://localhost:3000/api/admin/comments/${id}`, { method: 'DELETE' });
+        fetchData();
+    };
+
+    // --- XỬ LÝ LIÊN HỆ ---
+    const handleDeleteContact = async (id) => {
+        if (!window.confirm('Xóa liên hệ này?')) return;
+        await fetch(`http://localhost:3000/api/admin/contacts/${id}`, { method: 'DELETE' });
         fetchData();
     };
 
@@ -103,10 +113,16 @@ function AdminPage() {
                 >
                     Quản lý Bình luận
                 </button>
+                <button 
+                    style={activeTab === 'contacts' ? activeTabStyle : tabStyle} 
+                    onClick={() => setActiveTab('contacts')}
+                >
+                    Hòm thư Liên hệ ({contacts.length})
+                </button>
             </div>
 
             {/* 3. NỘI DUNG TAB */}
-            {activeTab === 'docs' ? (
+            {activeTab === 'docs' && (
                 <div>
                     {/* FORM SỬA (Chỉ hiện khi đang bấm nút Sửa) */}
                     {editingDoc && (
@@ -162,8 +178,9 @@ function AdminPage() {
                         </tbody>
                     </table>
                 </div>
-            ) : (
-                /* DANH SÁCH BÌNH LUẬN */
+            )}
+
+            {activeTab === 'comments' && (
                 <table style={tableStyle}>
                     <thead>
                         <tr style={{background: '#f8f9fa'}}>
@@ -187,6 +204,36 @@ function AdminPage() {
                                 </td>
                             </tr>
                         ))}
+                        {comments.length === 0 && <tr><td colSpan="4" style={{padding:20, textAlign:'center'}}>Chưa có bình luận</td></tr>}
+                    </tbody>
+                </table>
+            )}
+
+            {activeTab === 'contacts' && (
+                <table style={tableStyle}>
+                    <thead>
+                        <tr style={{background: '#f8f9fa'}}>
+                            <th style={thStyle}>Người gửi</th>
+                            <th style={thStyle}>Nội dung</th>
+                            <th style={thStyle}>Ngày gửi</th>
+                            <th style={thStyle}>Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {contacts.map(c => (
+                            <tr key={c._id} style={{borderBottom: '1px solid #eee'}}>
+                                <td style={tdStyle}>
+                                    <strong>{c.name}</strong><br/>
+                                    <span style={{fontSize:'12px', color:'#666'}}>{c.email}</span>
+                                </td>
+                                <td style={tdStyle}>{c.content}</td>
+                                <td style={tdStyle}>{new Date(c.createdAt).toLocaleDateString('vi-VN')}</td>
+                                <td style={tdStyle}>
+                                    <button onClick={() => handleDeleteContact(c._id)} style={{...btnSmall, background: '#EF4444'}}>Xóa</button>
+                                </td>
+                            </tr>
+                        ))}
+                        {contacts.length === 0 && <tr><td colSpan="4" style={{padding:20, textAlign:'center'}}>Chưa có liên hệ nào</td></tr>}
                     </tbody>
                 </table>
             )}
