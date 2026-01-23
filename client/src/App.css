@@ -1,0 +1,133 @@
+
+:root {
+  line-height: 1.5;
+  font-weight: 400;
+  font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
+}
+
+html, body, #root {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+}
+
+#root {
+  display: block; /* Đảm bảo không bị dính flex mặc định */
+  text-align: left; /* Reset text-align */
+}
+
+body { 
+  background-color: #F9FAFB;
+  color: #111827;
+}
+
+* { box-sizing: border-box; }
+a { text-decoration: none; color: inherit; }
+
+/* 2. NAVBAR */
+.navbar {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 0 40px; height: 70px;
+  background-color: #fff; border-bottom: 1px solid #E5E7EB;
+  position: sticky; top: 0; z-index: 100;
+  width: 100%; /* Ép full width */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+.nav-logo { font-size: 24px; font-weight: 800; color: #2563EB; letter-spacing: -0.5px; }
+.nav-menu { display: flex; gap: 30px; align-items: center; }
+.nav-link { font-weight: 500; color: #4B5563; transition: 0.2s; font-size: 15px; }
+.nav-link:hover { color: #2563EB; }
+.nav-link-admin { color: #2563EB; border: 1px solid #2563EB; padding: 5px 15px; border-radius: 6px; }
+.nav-link-admin:hover { background-color: #2563EB; color: white; }
+
+/* 3. LAYOUT CĂN GIỮA (Sửa lại để chắc chắn nằm giữa) */
+.page-centered {
+  min-height: calc(100vh - 70px); /* Trừ đi chiều cao navbar */
+  width: 100%;
+  display: flex; 
+  justify-content: center; /* Căn giữa ngang */
+  align-items: flex-start; 
+  padding-top: 50px; 
+}
+
+.form-container {
+  background: white; 
+  width: 100%; 
+  max-width: 500px;
+  padding: 40px; 
+  border-radius: 12px;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  border: 1px solid #E5E7EB;
+  margin: 0 auto; /* Backup để căn giữa block */
+}
+.form-container.wide { max-width: 700px; }
+
+/* Các thành phần Form */
+.form-group { margin-bottom: 20px; }
+.form-label { display: block; margin-bottom: 8px; font-weight: 600; color: #374151; }
+.form-input, .form-select, .form-textarea {
+  width: 100%; padding: 10px 12px; border: 1px solid #D1D5DB; border-radius: 6px;
+  font-size: 15px; outline: none; transition: border-color 0.2s;
+}
+.form-input:focus { border-color: #2563EB; }
+.form-textarea { height: 100px; resize: vertical; }
+.btn-primary {
+  background-color: #2563EB; color: white; padding: 10px 20px;
+  border-radius: 6px; font-weight: 600; font-size: 14px; border: none; cursor: pointer; transition: 0.2s; width: 100%;
+}
+.btn-primary:hover { background-color: #1D4ED8; }
+
+/* 4. HOMEPAGE LAYOUT */
+.search-section { background: #fff; padding: 30px 0; border-bottom: 1px solid #E5E7EB; margin-bottom: 30px; width: 100%; }
+.search-container { max-width: 800px; margin: 0 auto; display: flex; gap: 10px; padding: 0 20px; }
+.search-input { flex: 1; padding: 12px 16px; border: 1px solid #D1D5DB; border-radius: 8px; font-size: 16px; outline: none; }
+
+.main-layout { 
+  display: flex; 
+  gap: 40px; 
+  width: 100%;
+  max-width: 1200px; /* Giới hạn chiều rộng nội dung */
+  margin: 0 auto; /* Căn giữa nội dung trong màn hình lớn */
+  padding: 0 20px 50px 20px; 
+}
+
+/* Sidebar & Content */
+.sidebar { width: 250px; flex-shrink: 0; }
+.sidebar-title { font-size: 14px; font-weight: 700; text-transform: uppercase; color: #9CA3AF; margin-bottom: 15px; }
+.category-list { list-style: none; padding: 0; margin: 0 0 30px 0; }
+.category-item { padding: 10px 15px; margin-bottom: 5px; cursor: pointer; border-radius: 6px; color: #4B5563; font-weight: 500; transition: 0.2s; }
+.category-item:hover { background-color: #F3F4F6; color: #111827; }
+.category-item.active { background-color: #EFF6FF; color: #2563EB; font-weight: 600; }
+
+.content-area { flex: 1; }
+.section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+
+/* Grid Tài liệu */
+.document-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); 
+  gap: 24px;
+}
+
+.doc-card {
+  background: white; border: 1px solid #E5E7EB; border-radius: 12px; overflow: hidden;
+  transition: all 0.2s ease; display: flex; flex-direction: column; cursor: pointer; height: 100%;
+}
+.doc-card:hover { transform: translateY(-4px); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1); border-color: #BFDBFE; }
+.card-thumb { height: 140px; background: #F3F4F6; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid #F3F4F6; }
+.file-type-icon { width: 50px; height: 50px; background: #fff; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #DC2626; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+.card-body { padding: 16px; flex: 1; display: flex; flex-direction: column; }
+.card-category { font-size: 12px; color: #2563EB; font-weight: 600; text-transform: uppercase; margin-bottom: 6px; }
+.card-title { font-size: 16px; font-weight: 700; margin: 0 0 8px 0; line-height: 1.4; color: #1F2937; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.card-meta { margin-top: auto; display: flex; justify-content: space-between; font-size: 12px; color: #9CA3AF; padding-top: 10px; }
+
+/* Responsive */
+@media (max-width: 800px) {
+  .main-layout { flex-direction: column; }
+  .sidebar { width: 100%; display: flex; overflow-x: auto; padding-bottom: 10px; gap: 10px; }
+  .sidebar-title { display: none; }
+  .navbar { padding: 0 15px; }
+  .nav-menu { gap: 15px; font-size: 13px; }
+  .form-container { width: 95%; padding: 20px; }
+}
